@@ -1,0 +1,6 @@
+#
+# {{ ansible_managed }}
+#
+{% for item in rspamd_acl_blocklist_ips %}
+{{ item.ip }}
+{% endfor %}

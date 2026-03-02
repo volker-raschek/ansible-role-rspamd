@@ -1,0 +1,27 @@
+#jinja2: lstrip_blocks: True, trim_blocks: True
+#
+# {{ ansible_managed }}
+#
+
+db = {{ rspamd_redis_database }};
+{% if rspamd_redis_disabled_modules | length > 0 %}
+disabled_modules = [
+{% for item in rspamd_redis_disabled_modules %}
+  "{{ item }}",
+{% endfor %}
+];
+{% endif %}
+{% if rspamd_redis_password | length > 0 %}
+password = "{{ rspamd_redis_password }}";
+{% endif %}
+{% if rspamd_redis_username| length > 0 %}
+username = "{{ rspamd_redis_username }}";
+{% endif %}
+servers = "{{ rspamd_redis_servers | join(',') }}";
+{% if rspamd_redis_read_servers | length > 0 %}
+read_servers = "{{ rspamd_redis_read_servers | join(',') }}";
+{% endif %}
+{% if rspamd_redis_write_servers | length > 0 %}
+write_servers = "{{ rspamd_redis_write_servers | join(',') }}";
+{% endif %}
+timeout = {{ rspamd_redis_timeout }};

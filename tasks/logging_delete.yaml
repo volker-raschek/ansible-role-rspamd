@@ -1,0 +1,6 @@
+---
+
+- name: "Delete logging.inc"
+  ansible.builtin.file:
+    path: "{{ rspamd_local_d_dir }}/logging.inc"
+    state: "absent"

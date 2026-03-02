@@ -1,0 +1,48 @@
+---
+
+- name: "Create directory for dkim keys"
+  ansible.builtin.file:
+    path: "{{ rspamd_dkim_dir }}"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    state: "directory"
+
+- name: "Generate dkim keys"
+  ansible.builtin.command:
+    cmd: "bash -c \"rspamadm dkim_keygen -b 2048 -s {{ item.selector }} -k {{ rspamd_dkim_dir }}/{{ item.name }}.{{ item.selector }}.key > {{ rspamd_dkim_dir }}/{{ item.name }}.{{ item.selector }}.txt\""
+    creates: "{{ rspamd_dkim_dir }}/{{ item.name }}.{{ item.selector }}.txt"
+  with_items: "{{ rspamd_dkim_domains }}"
+  notify: Restart rspamd
+
+- name: "Change ownership for dkim key files"
+  ansible.builtin.file:
+    path: "{{ rspamd_dkim_dir }}/{{ item.name }}.{{ item.selector }}.txt"
+    owner: "{{ rspamd_unix_user }}"
+    group: "{{ rspamd_unix_group }}"
+    mode: "0440"
+  with_items: "{{ rspamd_dkim_domains }}"
+
+- name: "Change ownership for dkim dns record files"
+  ansible.builtin.file:
+    path: "{{ rspamd_dkim_dir }}/{{ item.name }}.{{ item.selector }}.key"
+    owner: "{{ rspamd_unix_user }}"
+    group: "{{ rspamd_unix_group }}"
+    mode: "0440"
+  with_items: "{{ rspamd_dkim_domains }}"
+
+- name: "Create dkim_signing.conf"
+  ansible.builtin.template:
+    src: etc/rspamd/local.d/dkim_signing.conf.j2
+    dest: "{{ rspamd_local_d_dir }}/dkim_signing.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Link ARC module to same DKIM configuration
+  ansible.builtin.file:
+    src: "{{ rspamd_local_d_dir }}/dkim_signing.conf"
+    dest: "{{ rspamd_local_d_dir }}/arc.conf"
+    owner: "root"
+    group: "root"
+    state: link

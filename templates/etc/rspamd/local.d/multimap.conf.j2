@@ -1,0 +1,39 @@
+#
+# {{ ansible_managed }}
+#
+{% if rspamd_acl_blocklist_from | length > 0 %}
+BLACKLIST_FROM {
+  type = "from";
+  map = "$CONFDIR/local.d/blocklist_from.map";
+  description = "Local from blocklist";
+  action = "reject";
+}
+
+{% endif %}
+{% if rspamd_acl_blocklist_ips | length > 0 %}
+BLACKLIST_IP {
+  type = "ip";
+  map = "$CONFDIR/local.d/blocklist_ips.map";
+  description = "Local ip blocklist";
+  action = "reject";
+}
+
+{% endif %}
+{% if rspamd_acl_allowlist_from | length > 0 %}
+WHITELIST_FROM {
+  type = "from";
+  map = "$CONFDIR/local.d/allowlist_from.map";
+  description = "Local from allowlist";
+  action = "accept";
+}
+
+{% endif %}
+{% if rspamd_acl_allowlist_ips | length > 0 %}
+WHITELIST_IP {
+  type = "ip";
+  map = "$CONFDIR/local.d/allowlist_ips.map";
+  description = "Local ip allowlist";
+  action = "accept";
+}
+
+{% endif %}

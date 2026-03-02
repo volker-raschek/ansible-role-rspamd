@@ -1,0 +1,73 @@
+---
+
+- name: "Create multimap.conf"
+  ansible.builtin.template:
+    src: etc/rspamd/local.d/multimap.conf.j2
+    dest: "{{ rspamd_local_d_dir }}/multimap.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: "Manage sender based allowlist"
+  block:
+  - name: "Create sender based allowlist"
+    when: rspamd_acl_allowlist_from | length > 0
+    ansible.builtin.template:
+      src: etc/rspamd/local.d/allowlist_from.map.j2
+      dest: "{{ rspamd_local_d_dir }}/allowlist_from.map"
+      owner: "root"
+      group: "root"
+      mode: "0644"
+  - name: "Delete sender based allowlist"
+    when: rspamd_acl_allowlist_from | length == 0
+    ansible.builtin.file:
+      path: "{{ rspamd_local_d_dir }}/allowlist_from.map"
+      state: "absent"
+
+- name: "Manage ip based allowlist"
+  block:
+  - name: "Create ip based allowlist"
+    when: rspamd_acl_allowlist_ips | length > 0
+    ansible.builtin.template:
+      src: etc/rspamd/local.d/allowlist_ips.map.j2
+      dest: "{{ rspamd_local_d_dir }}/allowlist_ips.map"
+      owner: "root"
+      group: "root"
+      mode: "0644"
+  - name: "Delete ip based allowlist"
+    when: rspamd_acl_allowlist_ips | length == 0
+    ansible.builtin.file:
+      path: "{{ rspamd_local_d_dir }}/allowlist_ips.map"
+      state: "absent"
+
+- name: "Manage sender based blocklist"
+  block:
+  - name: "Create sender based blocklist"
+    when: rspamd_acl_blocklist_from | length > 0
+    ansible.builtin.template:
+      src: etc/rspamd/local.d/blocklist_from.map.j2
+      dest: "{{ rspamd_local_d_dir }}/blocklist_from.map"
+      owner: "root"
+      group: "root"
+      mode: "0644"
+  - name: "Delete sender based blocklist"
+    when: rspamd_acl_blocklist_from | length == 0
+    ansible.builtin.file:
+      path: "{{ rspamd_local_d_dir }}/blocklist_from.map"
+      state: "absent"
+
+- name: "Manage ip based blocklist"
+  block:
+  - name: "Create ip based blocklist"
+    when: rspamd_acl_blocklist_ips | length > 0
+    ansible.builtin.template:
+      src: etc/rspamd/local.d/blocklist_ips.map.j2
+      dest: "{{ rspamd_local_d_dir }}/blocklist_ips.map"
+      owner: "root"
+      group: "root"
+      mode: "0644"
+  - name: "Delete ip based blocklist"
+    when: rspamd_acl_blocklist_ips | length == 0
+    ansible.builtin.file:
+      path: "{{ rspamd_local_d_dir }}/blocklist_ips.map"
+      state: "absent"

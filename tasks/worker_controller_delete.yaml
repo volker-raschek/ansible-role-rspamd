@@ -1,0 +1,6 @@
+---
+
+- name: "Delete worker-controller.inc"
+  ansible.builtin.file:
+    path: "{{ rspamd_local_d_dir }}/worker-controller.inc"
+    state: "absent"

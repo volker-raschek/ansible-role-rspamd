@@ -1,0 +1,101 @@
+---
+
+## @section ACLs
+## @param rspamd_acl_allowlist_from Allow emails by sender.
+## @param rspamd_acl_allowlist_ips Allow emails by ip addresses.
+## @param rspamd_acl_blocklist_from Reject emails by sender.
+## @param rspamd_acl_blocklist_ips Reject emails by ip addresses.
+rspamd_acl_allowlist_from: []
+# - from: "max.mustermann@example.local"
+# - from: "*@example.local"
+rspamd_acl_allowlist_ips: []
+# - ip: "10.11.12.13"
+rspamd_acl_blocklist_from: []
+# - from: "max.mustermann@example.local"
+# - from: "*@example.local"
+rspamd_acl_blocklist_ips: []
+# - ip: "10.11.12.13"
+
+
+## @section DKIM Singing configuration
+## @param rspamd_dkim_enabled Create `dkim_sining.conf`.
+## @param rspamd_dkim_allow_username_mismatch Enable DKIM signing for alias sender addresses.
+## @param rspamd_dkim_directory Directory of the DKIM keys.
+## @param rspamd_dkim_domains DKIM Domain configuration.
+rspamd_dkim_enabled: false
+rspamd_dkim_allow_username_mismatch: false
+rspamd_dkim_dir: "/var/lib/rspamd/dkim"
+rspamd_dkim_domains: []
+# - name: example.local
+#   selector: "2020"
+
+## @section DNS
+## @param List of DNS servers used for DNS lookups.
+rspamd_dns_servers: []
+# - 8.8.4.4
+# - 8.8.8.8
+
+## @section Logging configuration
+## https://docs.rspamd.com/configuration/logging/
+## @param rspamd_logging_enabled Create `logging.inc.conf`.
+## @param rspamd_logging_filename Path to log file for logging. Require logging_type `file`.
+## @param rspamd_logging_level Log level. Allowed values: `error`, `warning`, `notice`, `info`, `silent` and `debug`.
+## @param rspamd_logging_type Log type. Allowed values: `console`, `file` and `syslog`.
+rspamd_logging_enabled: true
+rspamd_logging_filename: ""
+rspamd_logging_level: "info"
+rspamd_logging_type: "syslog"
+
+## @section Redis
+## https://docs.rspamd.com/configuration/redis/#available-redis-options
+## @param rspamd_redis_enabled Create `redis.conf`.
+## @param rspamd_redis_database Number of redis database.
+## @param rspamd_redis_password Password to connect to redis.
+## @param rspamd_redis_username Username to connect to redis.
+## @param rspamd_redis_servers List of upstream redis server for read and write requests.
+## @param rspamd_redis_read_servers List of redis servers for read requests. Usually redis replication instances.
+## @param rspamd_redis_timeout Timeout in seconds to get reply from redis. For example `0.5s`, `1min`.
+## @param rspamd_redis_write_servers List of redis servers for write requests. Usually redis primary instances.
+## @param rspamd_redis_disabled_modules List of disabled modules.
+rspamd_redis_enabled: false
+rspamd_redis_database: "0"
+rspamd_redis_password: ""
+rspamd_redis_username: ""
+rspamd_redis_servers: []
+# - "redis.example.local"
+rspamd_redis_read_servers: []
+# - "replica-0.redis.example.local"
+# - "replica-1.redis.example.local"
+rspamd_redis_timeout: "5s"
+rspamd_redis_write_servers: []
+# - "primary-0.redis.example.local"
+# - "primary-1.redis.example.local"
+rspamd_redis_disabled_modules: []
+# - "ratelimit"
+
+## @section Worker Controller
+## https://docs.rspamd.com/workers/#common-worker-options
+## @param rspamd_worker_controller_enabled Create `worker-controller.conf`.
+## @param rspamd_worker_controller_read_password Password required for read-only commands.
+## @param rspamd_worker_controller_read_password Password required for write (privileged) commands.
+## @param rspamd_worker_controller_secure_ips List of secure IP-Addresses for password-less access. If using a reverse proxy with X-Forwarded-For, include both proxy and client IPs.
+## @param rspamd_worker_controller_ssl_cert Path to PEM certificate file (required when using ssl bind sockets).
+## @param rspamd_worker_controller_ssl_key Path to PEM private key file (required when using ssl bind sockets).
+rspamd_worker_controller_enabled: false
+rspamd_worker_controller_bind_socket: "localhost:11334"
+rspamd_worker_controller_read_password: ""
+rspamd_worker_controller_write_password: ""
+rspamd_worker_controller_secure_ips:
+- "localhost"
+rspamd_worker_controller_ssl_cert: ""
+rspamd_worker_controller_ssl_key: ""
+
+## @section Drop-In directories
+## @param rspamd_local_d_dir Drop-In directory to customize rspamd configurations.
+## @param rspamd_modules_d_dir Drop-In directory to customize rspamd modules.
+## @param rspamd_override_d_dir Drop-In directory to customize rspamd plugins.
+## @param rspamd_plugins_d_dir Drop-In directory to override rspamd configurations.
+rspamd_local_d_dir: "/etc/rspamd/local.d"
+rspamd_modules_d_dir: "/etc/rspamd/modules.d"
+rspamd_override_d_dir: "/etc/rspamd/override.d"
+rspamd_plugins_d_dir: "/etc/rspamd/plugins.d"

@@ -1,0 +1,4 @@
+---
+
+rspamd_unix_user: rspamd
+rspamd_unix_group: rspamd

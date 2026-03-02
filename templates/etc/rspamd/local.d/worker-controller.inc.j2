@@ -1,0 +1,22 @@
+#
+# {{ ansible_managed }}
+#
+
+{% if rspamd_worker_controller_bind_socket | length > 0 %}
+bind_socket = "{{ rspamd_worker_controller_bind_socket }}";
+{% endif %}
+{% if rspamd_worker_controller_write_password_salted.stdout is defined and rspamd_worker_controller_write_password_salted.stdout | length > 0 %}
+enable_password = "{{ rspamd_worker_controller_write_password_salted.stdout }}";
+{% endif %}
+{% if rspamd_worker_controller_read_password_salted.stdout is defined and rspamd_worker_controller_read_password_salted.stdout | length > 0 %}
+password = "{{ rspamd_worker_controller_read_password_salted.stdout }}";
+{% endif %}
+{% if rspamd_worker_controller_secure_ips | length > 0 %}
+secure_ip = "{{ rspamd_worker_controller_secure_ips | join(',') }}";
+{% endif %}
+{% if rspamd_worker_controller_ssl_cert | length > 0 %}
+ssl_cert = "{{ rspamd_worker_controller_ssl_cert }}";
+{% endif %}
+{% if rspamd_worker_controller_ssl_key | length > 0 %}
+ssl_key = "{{ rspamd_worker_controller_ssl_key }}";
+{% endif %}

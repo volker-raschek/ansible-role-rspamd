@@ -1,0 +1,11 @@
+---
+
+- name: "Delete directory for dkim keys"
+  ansible.builtin.file:
+    path: "{{ rspamd_dkim_dir }}"
+    state: "absent"
+
+- name: "Delete dkim_signing.conf"
+  ansible.builtin.file:
+    path: "{{ rspamd_local_d_dir }}/dkim_signing.conf"
+    state: "absent"

@@ -1,0 +1,176 @@
+---
+argument_specs:
+  main:
+    short_description: "Role to install and configure rspamd mail filter"
+    description:
+      - "This role configures rspamd with support for DKIM signing, Redis integration, logging, ACLs, and worker controller settings."
+    author: "Markus Pesch"
+    options:
+      # ACLs
+      rspamd_acl_allowlist_from:
+        description: "Allow emails by sender."
+        type: list
+        elements: dict
+        default: []
+      rspamd_acl_allowlist_ips:
+        description: "Allow emails by IP addresses."
+        type: list
+        elements: dict
+        default: []
+      rspamd_acl_blocklist_from:
+        description: "Reject emails by sender."
+        type: list
+        elements: dict
+        default: []
+      rspamd_acl_blocklist_ips:
+        description: "Reject emails by IP addresses."
+        type: list
+        elements: dict
+        default: []
+      
+      # DKIM Signing
+      rspamd_dkim_enabled:
+        description: "Create dkim_signing.conf."
+        type: bool
+        default: false
+      rspamd_dkim_allow_username_mismatch:
+        description: "Enable DKIM signing for alias sender addresses."
+        type: bool
+        default: false
+      rspamd_dkim_dir:
+        description: "Directory of the DKIM keys."
+        type: str
+        default: "/var/lib/rspamd/dkim"
+      rspamd_dkim_domains:
+        description: "DKIM Domain configuration."
+        type: list
+        elements: dict
+        default: []
+      
+      # DNS
+      rspamd_dns_servers:
+        description: "List of DNS servers used for DNS lookups."
+        type: list
+        elements: str
+        default: []
+      
+      # Logging
+      rspamd_logging_enabled:
+        description: "Create logging.inc.conf."
+        type: bool
+        default: true
+      rspamd_logging_filename:
+        description: "Path to log file for logging. Requires logging_type 'file'."
+        type: str
+        default: ""
+      rspamd_logging_level:
+        description: "Log level."
+        type: str
+        default: "info"
+        choices:
+          - error
+          - warning
+          - notice
+          - info
+          - silent
+          - debug
+      rspamd_logging_type:
+        description: "Log type."
+        type: str
+        default: "syslog"
+        choices:
+          - console
+          - file
+          - syslog
+      
+      # Redis
+      rspamd_redis_enabled:
+        description: "Create redis.conf."
+        type: bool
+        default: false
+      rspamd_redis_database:
+        description: "Number of redis database."
+        type: str
+        default: "0"
+      rspamd_redis_password:
+        description: "Password to connect to redis."
+        type: str
+        default: ""
+      rspamd_redis_username:
+        description: "Username to connect to redis."
+        type: str
+        default: ""
+      rspamd_redis_servers:
+        description: "List of upstream redis servers for read and write requests."
+        type: list
+        elements: str
+        default: []
+      rspamd_redis_read_servers:
+        description: "List of redis servers for read requests. Usually redis replication instances."
+        type: list
+        elements: str
+        default: []
+      rspamd_redis_timeout:
+        description: "Timeout in seconds to get reply from redis. For example '0.5s', '1min'."
+        type: str
+        default: "5s"
+      rspamd_redis_write_servers:
+        description: "List of redis servers for write requests. Usually redis primary instances."
+        type: list
+        elements: str
+        default: []
+      rspamd_redis_disabled_modules:
+        description: "List of disabled modules."
+        type: list
+        elements: str
+        default: []
+      
+      # Worker Controller
+      rspamd_worker_controller_enabled:
+        description: "Create worker-controller.conf."
+        type: bool
+        default: false
+      rspamd_worker_controller_bind_socket:
+        description: "Bind socket for worker controller."
+        type: str
+        default: "localhost:11334"
+      rspamd_worker_controller_read_password:
+        description: "Password required for read-only commands."
+        type: str
+        default: ""
+      rspamd_worker_controller_write_password:
+        description: "Password required for write (privileged) commands."
+        type: str
+        default: ""
+      rspamd_worker_controller_secure_ips:
+        description: "List of secure IP addresses for password-less access. If using a reverse proxy with X-Forwarded-For, include both proxy and client IPs."
+        type: list
+        elements: str
+        default:
+          - localhost
+      rspamd_worker_controller_ssl_cert:
+        description: "Path to PEM certificate file (required when using ssl bind sockets)."
+        type: str
+        default: ""
+      rspamd_worker_controller_ssl_key:
+        description: "Path to PEM private key file (required when using ssl bind sockets)."
+        type: str
+        default: ""
+      
+      # Drop-In directories
+      rspamd_local_d_dir:
+        description: "Drop-In directory to customize rspamd configurations."
+        type: str
+        default: "/etc/rspamd/local.d"
+      rspamd_modules_d_dir:
+        description: "Drop-In directory to customize rspamd modules."
+        type: str
+        default: "/etc/rspamd/modules.d"
+      rspamd_override_d_dir:
+        description: "Drop-In directory to override rspamd configurations."
+        type: str
+        default: "/etc/rspamd/override.d"
+      rspamd_plugins_d_dir:
+        description: "Drop-In directory to customize rspamd plugins."
+        type: str
+        default: "/etc/rspamd/plugins.d"

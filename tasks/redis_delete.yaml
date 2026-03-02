@@ -1,0 +1,6 @@
+---
+
+- name: "Delete redis.conf"
+  ansible.builtin.file:
+    path: "{{ rspamd_local_d_dir }}/redis.conf"
+    state: "absent"

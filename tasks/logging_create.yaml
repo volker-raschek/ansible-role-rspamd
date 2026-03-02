@@ -1,0 +1,9 @@
+---
+
+- name: "Create logging.inc"
+  ansible.builtin.template:
+    src: etc/rspamd/local.d/logging.inc.j2
+    dest: "{{ rspamd_local_d_dir }}/logging.inc"
+    owner: "root"
+    group: "root"
+    mode: "0644"

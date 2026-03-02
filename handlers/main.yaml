@@ -1,0 +1,11 @@
+---
+
+- name: Restart rspamd
+  ansible.builtin.systemd:
+    name: rspamd
+    state: restarted
+
+- name: Restart nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted

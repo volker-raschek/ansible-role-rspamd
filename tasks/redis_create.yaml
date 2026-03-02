@@ -1,0 +1,9 @@
+---
+
+- name: "Create redis.conf"
+  ansible.builtin.template:
+    src: etc/rspamd/local.d/redis.conf.j2
+    dest: "{{ rspamd_local_d_dir }}/redis.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"

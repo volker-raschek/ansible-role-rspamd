@@ -1,0 +1,23 @@
+---
+
+- name: Generate salted read password
+  when: rspamd_worker_controller_read_password | length > 0
+  ansible.builtin.command:
+    cmd: "rspamadm pw --password {{ rspamd_worker_controller_read_password }}"
+  changed_when: false
+  register: rspamd_worker_controller_read_password_salted
+
+- name: Generate salted write password
+  when: rspamd_worker_controller_write_password | length > 0
+  ansible.builtin.command:
+    cmd: "rspamadm pw --password {{ rspamd_worker_controller_write_password }}"
+  changed_when: false
+  register: rspamd_worker_controller_write_password_salted
+
+- name: "Create worker-controller.inc"
+  ansible.builtin.template:
+    src: etc/rspamd/local.d/worker-controller.inc.j2
+    dest: "{{ rspamd_local_d_dir }}/worker-controller.inc"
+    owner: "root"
+    group: "root"
+    mode: "0644"

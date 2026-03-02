@@ -1,0 +1,28 @@
+dependencies: []
+galaxy_info:
+  author: "Markus Pesch"
+  company: "Cryptic Systems"
+  description: "Role to install and configure rspamd mail filter"
+  galaxy_tags:
+  - rspamd
+  - mail
+  - spam
+  - filter
+  - email
+  license: "MIT"
+  min_ansible_version: "2.9"
+  namespace: volker-raschek
+  platforms:
+  - name: ArchLinux
+    versions:
+    - all
+  - name: EL
+    versions:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+  role_name: "rspamd"

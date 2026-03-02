@@ -1,0 +1,23 @@
+#
+# {{ ansible_managed }}
+#
+
+#
+# Documentation: https://rspamd.com/doc/modules/dkim_signing.html#configuration
+#
+
+# Default DKIM Keys
+# selector = "";
+# path = "";
+
+allow_username_mismatch = {{ rspamd_dkim_allow_username_mismatch | lower }};
+
+# Domain specific settings
+domain {
+{% for dkim_domain in rspamd_dkim_domains %}
+  {{ dkim_domain.name }} {
+    path = "{{ rspamd_dkim_dir }}/{{ dkim_domain.name }}.{{ dkim_domain.selector }}.key";
+    selector = "{{ dkim_domain.selector }}";
+  }
+{% endfor %}
+}

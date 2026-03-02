@@ -1,0 +1,121 @@
+---
+
+- name: Include OS-specific variables
+  tags: [ letsencrypt-hooks ]
+  ansible.builtin.include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+      - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['architecture'] }}.yaml"
+      - "{{ ansible_facts['distribution'] }}.yaml"
+      - "{{ ansible_facts['os_family'] }}_{{ ansible_facts['architecture'] }}.yaml"
+      - "{{ ansible_facts['os_family'] }}.yaml"
+      - main.yaml
+      paths:
+      - vars
+
+- name: Install rspamd
+  ansible.builtin.package:
+    name: rspamd
+    state: "present"
+
+- name: Create directory for custom rspamd configurations
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+    state: directory
+  with_items:
+  - "{{ rspamd_local_d_dir }}"
+  - "{{ rspamd_modules_d_dir }}"
+  - "{{ rspamd_override_d_dir }}"
+  - "{{ rspamd_plugins_d_dir }}"
+
+- name: Manage dkim configuration
+  notify:
+  - Restart rspamd
+  block:
+  - name: Create dkim configuration
+    when: rspamd_dkim_enabled
+    ansible.builtin.include_tasks: dkim_create.yaml
+  - name: Delete dkim configuration
+    when: not rspamd_dkim_enabled
+    ansible.builtin.include_tasks: dkim_delete.yaml
+
+- name: Manage logging configuration
+  notify:
+  - Restart rspamd
+  block:
+  - name: Create logging configuration
+    when: rspamd_logging_enabled
+    ansible.builtin.include_tasks: logging_create.yaml
+  - name: Delete logging configuration
+    when: not rspamd_logging_enabled
+    ansible.builtin.include_tasks: logging_delete.yaml
+
+- name: Manage multimaps
+  ansible.builtin.include_tasks: multimaps.yaml
+
+- name: Manage redis configuration
+  notify:
+  - Restart rspamd
+  block:
+  - name: Create redis configuration
+    when: rspamd_redis_enabled
+    ansible.builtin.include_tasks: redis_create.yaml
+  - name: Delete redis configuration
+    when: not rspamd_redis_enabled
+    ansible.builtin.include_tasks: redis_delete.yaml
+
+- name: Manage worker controller
+  notify:
+  - Restart rspamd
+  block:
+  - name: Create worker controller configuration
+    when: rspamd_worker_controller_enabled
+    ansible.builtin.include_tasks: worker_controller_create.yaml
+  - name: Delete worker controller configuration
+    when: not rspamd_worker_controller_enabled
+    ansible.builtin.include_tasks: worker_controller_delete.yaml
+
+- name: Template local.d files
+  vars:
+    selector_name: "{{ rspamd_dkim_selector_name | default('2020') }}"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ rspamd_local_d_dir }}/{{ item | basename }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+  - etc/rspamd/local.d/classifier-bayes.conf
+  - etc/rspamd/local.d/milter_headers.conf
+  - etc/rspamd/local.d/options.inc
+  notify:
+  - Restart rspamd
+
+- name: Template override.d files
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ rspamd_override_d_dir }}/{{ item | basename }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items:
+  - etc/rspamd/override.d/classifier-bayes.conf
+  notify:
+  - Restart rspamd
+
+- name: Test rspamd configuration
+  ansible.builtin.command:
+    cmd: rspamadm configtest --strict --config /etc/rspamd/rspamd.conf
+  register: _rspamd_rspamadm_configtest
+  changed_when: false
+  failed_when: _rspamd_rspamadm_configtest.rc > 0
+
+- name: Start and enable rspamd
+  ansible.builtin.systemd:
+    name: rspamd
+    state: started
+    enabled: true

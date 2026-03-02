@@ -1,0 +1,10 @@
+#
+# {{ ansible_managed }}
+#
+
+{% if rspamd_dns_server is defined and rspamd_dns_servers | length > 0 %}
+dns {
+  nameserver = "{{ rspamd_dns_server }}";
+}
+{% endif %}
+enable_test_patterns = true;

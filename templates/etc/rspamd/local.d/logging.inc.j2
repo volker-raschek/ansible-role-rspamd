@@ -1,0 +1,9 @@
+#
+# {{ ansible_managed }}
+#
+
+{% if rspamd_logging_type == "file" and rspamd_logging_filename | length > 0 %}
+filename = "{{ rspamd_logging_filename }}";
+{% endif %}
+level = "{{ rspamd_logging_level }}";
+type = "{{ rspamd_logging_type}}";
