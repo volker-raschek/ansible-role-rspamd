@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: "Role to install and configure rspamd mail filter"
     description:
-      - "This role configures rspamd with support for DKIM signing, Redis integration, logging, ACLs, and worker controller settings."
+    - "This role configures rspamd with support for DKIM signing, Redis integration, logging, ACLs, and worker controller settings."
     author: "Markus Pesch"
     options:
       # ACLs
@@ -27,7 +27,7 @@ argument_specs:
         type: list
         elements: dict
         default: []
-      
+
       # DKIM Signing
       rspamd_dkim_enabled:
         description: "Create dkim_signing.conf."
@@ -46,14 +46,14 @@ argument_specs:
         type: list
         elements: dict
         default: []
-      
+
       # DNS
       rspamd_dns_servers:
         description: "List of DNS servers used for DNS lookups."
         type: list
         elements: str
         default: []
-      
+
       # Logging
       rspamd_logging_enabled:
         description: "Create logging.inc.conf."
@@ -68,21 +68,21 @@ argument_specs:
         type: str
         default: "info"
         choices:
-          - error
-          - warning
-          - notice
-          - info
-          - silent
-          - debug
+        - error
+        - warning
+        - notice
+        - info
+        - silent
+        - debug
       rspamd_logging_type:
         description: "Log type."
         type: str
         default: "syslog"
         choices:
-          - console
-          - file
-          - syslog
-      
+        - console
+        - file
+        - syslog
+
       # Redis
       rspamd_redis_enabled:
         description: "Create redis.conf."
@@ -124,7 +124,7 @@ argument_specs:
         type: list
         elements: str
         default: []
-      
+
       # Worker Controller
       rspamd_worker_controller_enabled:
         description: "Create worker-controller.conf."
@@ -147,7 +147,7 @@ argument_specs:
         type: list
         elements: str
         default:
-          - localhost
+        - localhost
       rspamd_worker_controller_ssl_cert:
         description: "Path to PEM certificate file (required when using ssl bind sockets)."
         type: str
@@ -156,7 +156,7 @@ argument_specs:
         description: "Path to PEM private key file (required when using ssl bind sockets)."
         type: str
         default: ""
-      
+
       # Drop-In directories
       rspamd_local_d_dir:
         description: "Drop-In directory to customize rspamd configurations."
