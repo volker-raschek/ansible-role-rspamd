@@ -20,7 +20,7 @@ rspamd_acl_blocklist_ips: []
 ## @section DKIM Singing configuration
 ## @param rspamd_dkim_enabled Create `dkim_sining.conf`.
 ## @param rspamd_dkim_allow_username_mismatch Enable DKIM signing for alias sender addresses.
-## @param rspamd_dkim_directory Directory of the DKIM keys.
+## @param rspamd_dkim_dir Directory of the DKIM keys.
 ## @param rspamd_dkim_domains DKIM Domain configuration.
 rspamd_dkim_enabled: false
 rspamd_dkim_allow_username_mismatch: false
@@ -77,7 +77,7 @@ rspamd_redis_disabled_modules: []
 ## https://docs.rspamd.com/workers/#common-worker-options
 ## @param rspamd_worker_controller_enabled Create `worker-controller.conf`.
 ## @param rspamd_worker_controller_read_password Password required for read-only commands.
-## @param rspamd_worker_controller_read_password Password required for write (privileged) commands.
+## @param rspamd_worker_controller_write_password Password required for write (privileged) commands.
 ## @param rspamd_worker_controller_secure_ips List of secure IP-Addresses for password-less access. If using a reverse proxy with X-Forwarded-For, include both proxy and client IPs.
 ## @param rspamd_worker_controller_ssl_cert Path to PEM certificate file (required when using ssl bind sockets).
 ## @param rspamd_worker_controller_ssl_key Path to PEM private key file (required when using ssl bind sockets).
@@ -93,8 +93,8 @@ rspamd_worker_controller_ssl_key: ""
 ## @section Drop-In directories
 ## @param rspamd_local_d_dir Drop-In directory to customize rspamd configurations.
 ## @param rspamd_modules_d_dir Drop-In directory to customize rspamd modules.
-## @param rspamd_override_d_dir Drop-In directory to customize rspamd plugins.
-## @param rspamd_plugins_d_dir Drop-In directory to override rspamd configurations.
+## @param rspamd_override_d_dir Drop-In directory to override rspamd configurations.
+## @param rspamd_plugins_d_dir Drop-In directory to customize rspamd plugins.
 rspamd_local_d_dir: "/etc/rspamd/local.d"
 rspamd_modules_d_dir: "/etc/rspamd/modules.d"
 rspamd_override_d_dir: "/etc/rspamd/override.d"
